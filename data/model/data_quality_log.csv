@@ -1,0 +1,6 @@
+check_name,rows_affected,action_taken
+Exact duplicate customer rows,1,Kept the first row per CustomerId (ROW_NUMBER)
+Country written as FRA / French instead of France,3274,Mapped to France
+Missing surname,3,Set to Unknown (not used in analysis)
+Missing age,3,"Left as NULL, shown as age band Unknown (not imputed)"
+Salary = -999999 (placeholder code),3,Set to NULL

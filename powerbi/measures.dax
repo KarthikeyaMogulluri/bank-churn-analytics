@@ -1,0 +1,36 @@
+// DAX measures for the Bank Churn dashboard.
+// Create each one in Power BI: select the "accounts" table > New measure > paste one block.
+
+Customers = COUNTROWS ( accounts )
+
+Churned Customers = CALCULATE ( [Customers], accounts[churned] = 1 )
+
+Churn Rate % = DIVIDE ( [Churned Customers], [Customers] )
+
+Balance Lost = CALCULATE ( SUM ( accounts[balance] ), accounts[churned] = 1 )
+
+Share of Balance Lost % =
+DIVIDE ( [Balance Lost], CALCULATE ( [Balance Lost], ALL ( customers[country] ) ) )
+
+Retention Targets =
+CALCULATE (
+    [Customers],
+    accounts[churned] = 0,
+    accounts[is_active] = 0,
+    accounts[balance] > 0,
+    customers[age] >= 40,
+    customers[age] <= 59
+)
+
+Balance at Risk =
+CALCULATE (
+    SUM ( accounts[balance] ),
+    accounts[churned] = 0,
+    accounts[is_active] = 0,
+    accounts[balance] > 0,
+    customers[age] >= 40,
+    customers[age] <= 59
+)
+
+// Churn rate compared with the bank average, for conditional formatting
+Churn vs Average (pts) = [Churn Rate %] - CALCULATE ( [Churn Rate %], ALL ( customers ), ALL ( accounts ) )
